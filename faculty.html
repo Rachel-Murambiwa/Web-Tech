@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faculty Dashboard | Ashesi Attendance</title>
+  <link rel="stylesheet" href="faculty.css">
+</head>
+<body>
+  <nav>
+    <h2>Ashesi Faculty Dashboard</h2>
+    <ul>
+      <li><a href="#" class="active">Attendance</a></li>
+      <li><a href="login.html">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="attendance-box">
+      <h3>Generate Attendance PIN</h3>
+      <button onclick="generatePin()">Generate PIN</button>
+      <p id="generatedPin"></p>
+
+      <h3>Students Registered Attendance</h3>
+      <ul id="studentList">
+        <ol>
+            Rachel Murambiwa
+        </ol>
+        <ol>
+            Aisha Chihuri
+        </ol>
+        <ol>
+            Tanatswa Mhiribidi
+        </ol>
+        <ol>
+            Soukuratou 
+        </ol>
+      </ul>
+    </div>
+  </main>
+
+  <script src="faculty.js"></script>
+</body>
+</html>

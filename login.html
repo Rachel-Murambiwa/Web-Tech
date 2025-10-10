@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+  <div class="form-container">
+    <h2>
+        Login
+    </h2>
+    <form onsubmit="redirectUser(event)">
+      <input type="email" placeholder="Email" required>
+      <input type="password" placeholder="Password" required>
+      <select id="status" required>
+        <option value="" disabled selected>
+            Status
+        </option>
+        <option value="student">
+            Student
+        </option>
+        <option value="faculty">
+            Faculty
+        </option>
+        <option value="admin">
+            Admin
+        </option>
+      </select>
+      <button type="submit">
+        Login
+    </button>
+    </form>
+  </div>
+<script src="login.js"></script>
+</body>
+</html>
