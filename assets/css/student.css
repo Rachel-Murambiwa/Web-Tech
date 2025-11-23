@@ -130,6 +130,44 @@ body{
   font-size: 14px;
 }
 
+/* ---------------------------
+   TABLE STYLING FOR COURSES
+--------------------------- */
+.card table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.card th {
+  background-color: #800000;
+  color: white;
+  padding: 10px;
+  text-align: left;
+}
+
+.card td {
+  padding: 10px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+}
+
+.card tr:hover td {
+  background-color: #f3e6e6;
+}
+
+/* Button inside table */
+.card table button {
+  padding: 6px 15px;
+  font-size: 14px;
+  background-color: #800000;
+  border-radius: 4px;
+}
+
+.card table button:hover {
+  background-color: #a52a2a;
+}
+
 
 @media (max-width: 768px) {
   .dashboard {
