@@ -2,19 +2,15 @@
 session_start();
 
 $student_id = 36212027;
-
 $host = "localhost";
 $user = "root";
 $pass = "";
 $db   = "registration";
-
 $conn = mysqli_connect($host, $user, $pass, $db);
 
 if (!$conn) {
     die("Database connection failed: " . mysqli_connect_error());
 }
-
-
 $courses = [];
 $sql = "SELECT * FROM courses";
 $result = mysqli_query($conn, $sql);
@@ -38,15 +34,11 @@ if ($result && mysqli_num_rows($result) > 0) {
     }
 }
 
-
 if (isset($_POST['course_id'])) {
     $course_id = $_POST['course_id'];
-
-    // Check if already requested
     $check = "SELECT * FROM course_requests 
               WHERE student_id=$student_id AND course_id=$course_id AND status='pending'";
     $res = mysqli_query($conn, $check);
-
     if (mysqli_num_rows($res) == 0) {
         $insert = "INSERT INTO course_requests (student_id, course_id, status)
                    VALUES ($student_id, $course_id, 'pending')";
@@ -57,6 +49,7 @@ if (isset($_POST['course_id'])) {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,8 +80,6 @@ if (isset($_POST['course_id'])) {
     </aside>
 
     <section class="content">
-
-      <!-- Profile Section -->
       <section id="profile" class="card">
         <h2>Profile</h2>
         <p><strong>Name:</strong> Rachel Murambiwa</p>
@@ -97,12 +88,9 @@ if (isset($_POST['course_id'])) {
         <p><strong>Year:</strong> Junior</p>
       </section>
 
-      <!-- Available Courses -->
       <section id="courses" class="card">
         <h2>Available Courses</h2>
-
         <?php if (!empty($msg)) echo "<p style='color:green;'>$msg</p>"; ?>
-
         <table border="1" cellpadding="10">
             <tr>
                 <th>Course Code</th>
@@ -125,7 +113,6 @@ if (isset($_POST['course_id'])) {
         </table>
       </section>
 
-      <!-- Enrolled Courses -->
       <section id="enrolled" class="card">
         <h2>My Courses</h2>
 
@@ -145,9 +132,5 @@ if (isset($_POST['course_id'])) {
 
     </section>
 </main>
-
-<footer class="footer">
-    <p>© 2025 Ashesi University | Student Dashboard</p>
-</footer>
 </body>
 </html>

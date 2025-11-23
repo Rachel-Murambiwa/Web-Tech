@@ -12,7 +12,6 @@
             Register
         </h2>
     <input type="text" for="name" name="name" placeholder="First Name" required>
-    <!-- <input type="text" name="last_name" placeholder="Last Name" required> -->
     <input type="email" name="email" placeholder="Email" required>
     <select name="status" id="registerStatus" required>
     <option value="" disabled selected>

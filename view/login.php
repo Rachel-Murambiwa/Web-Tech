@@ -1,8 +1,8 @@
 <?php
 session_start();
-require_once("../db/config.php"); // make sure path is correct
+require_once("../db/config.php");
 
-$error = ""; // error message holder
+$error = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 

@@ -1,6 +1,7 @@
 <?php
 $stmt = mysqli_prepare($conn, "
-    SELECT cr.id AS request_id, u.name AS student_name, u.email, u.id AS student_id, c.course_code, c.course_title
+    SELECT cr.id AS request_id, u.name AS student_name, u.email, u.id AS student_id, 
+           c.course_code, c.course_title
     FROM course_requests cr
     JOIN users u ON cr.student_id = u.id
     JOIN courses c ON cr.course_id = c.id
