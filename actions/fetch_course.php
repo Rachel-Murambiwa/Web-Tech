@@ -1,7 +1,7 @@
 <?php
 $stmt = mysqli_prepare($conn, "
     SELECT c.id, c.course_code, c.course_title
-    FROM courses c
+    FROM courses_lms c
     JOIN course_faculty cf ON c.id = cf.course_id
     WHERE cf.faculty_id = ?
 ");

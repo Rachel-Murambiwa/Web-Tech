@@ -15,7 +15,7 @@ $requests = [];
 
 $query = "
     SELECT c.id, c.course_code, c.course_title
-    FROM courses c
+    FROM courses_lms c
     JOIN course_faculty cf ON c.id = cf.course_id
     WHERE cf.faculty_id = ?
 ";
@@ -36,8 +36,8 @@ $query2 = "
     SELECT cr.id AS request_id, u.name AS student_name, u.email,
            u.id AS student_id, c.course_code, c.course_title
     FROM course_requests cr
-    JOIN users u ON cr.student_id = u.id
-    JOIN courses c ON cr.course_id = c.id
+    JOIN users_lms u ON cr.student_id = u.id
+    JOIN courses_lms c ON cr.course_id = c.id
     JOIN course_faculty cf ON c.id = cf.course_id
     WHERE cf.faculty_id = ? AND cr.status='pending'
 ";

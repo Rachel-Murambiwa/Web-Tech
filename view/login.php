@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-    $stmt = mysqli_prepare($conn, "SELECT id, password, role_id, name FROM users WHERE email = ?");
+    $stmt = mysqli_prepare($conn, "SELECT id, password, role_id, name FROM users_lms WHERE email = ?");
     mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_store_result($stmt);

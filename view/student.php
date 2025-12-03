@@ -10,7 +10,7 @@ $student_id = $_SESSION['user_id'];
 
 // Fetch Available Courses
 $courses = [];
-$sql = "SELECT * FROM courses";
+$sql = "SELECT * FROM courses_lms";
 $result = mysqli_query($conn, $sql);
 if ($result) {
     while ($row = mysqli_fetch_assoc($result)) {
@@ -22,7 +22,7 @@ if ($result) {
 $enrolled = [];
 $sql = "SELECT c.course_code, c.course_title 
         FROM enrollments e
-        INNER JOIN courses c ON e.course_id = c.id
+        INNER JOIN courses_lms c ON e.course_id = c.id
         WHERE e.student_id = $student_id";
 
 $result = mysqli_query($conn, $sql);
@@ -132,7 +132,7 @@ if (isset($_POST['course_id'])) {
                     (SELECT COUNT(*) FROM class_sessions cs 
                      WHERE cs.course_id = c.id) as total
                     FROM enrollments e 
-                    JOIN courses c ON e.course_id = c.id
+                    JOIN courses_lms c ON e.course_id = c.id
                     WHERE e.student_id = $student_id
                 ";
                 $repResult = mysqli_query($conn, $reportQuery);

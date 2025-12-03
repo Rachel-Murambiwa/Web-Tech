@@ -28,8 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $role_id = 3; // Default to student if something goes wrong
             break;
     }
-    
-    $check_sql = "SELECT id FROM users WHERE email = ?";
+
+    $check_sql = "SELECT id FROM users_lms WHERE email = ?";
     $stmt = mysqli_prepare($conn, $check_sql);
     mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     mysqli_stmt_close($stmt);
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    $insert_sql = "INSERT INTO users (name, email, password, role_id) VALUES (?, ?, ?, ?)";
+    $insert_sql = "INSERT INTO users_lms (name, email, password, role_id) VALUES (?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $insert_sql);
     mysqli_stmt_bind_param($stmt, "sssi", $name, $email, $hashedPassword, $role_id);
     if (mysqli_stmt_execute($stmt)) {

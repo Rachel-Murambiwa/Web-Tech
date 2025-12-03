@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $course_code = trim($_POST['courseCode']);
     $course_title = trim($_POST['courseTitle']);
     $faculty_id = $_SESSION['user_id'];
-    $stmt = mysqli_prepare($conn, "INSERT INTO courses (course_code, course_title) VALUES (?, ?)");
+    $stmt = mysqli_prepare($conn, "INSERT INTO courses_lms (course_code, course_title) VALUES (?, ?)");
     mysqli_stmt_bind_param($stmt, "ss", $course_code, $course_title);
     mysqli_stmt_execute($stmt);
     $course_id = mysqli_insert_id($conn); 
