@@ -1,23 +1,32 @@
 <?php
-// ../actions/mark_attendance.php
+// actions/mark_attendance.php
 session_start();
 require_once __DIR__ . '/../db/config.php';
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../view/login.php");
-    exit();
-}
+// 1. Check Login
+// if (!isset($_SESSION['user_id'])) {
+//     header("Location: ../view/login.html");
+//     exit();
+// }
 
 $student_id = $_SESSION['user_id'];
-$pin = isset($_POST['session_pin']) ? trim($_POST['session_pin']) : '';
+
+// --- FIX 1: Check for 'pin' (matches your HTML) OR 'session_pin' ---
+if (isset($_POST['pin'])) {
+    $pin = trim($_POST['pin']);
+} elseif (isset($_POST['session_pin'])) {
+    $pin = trim($_POST['session_pin']);
+} else {
+    $pin = '';
+}
 
 if (empty($pin)) {
-    $_SESSION['msg'] = "Please enter a PIN.";
+    $_SESSION['msg'] = "Error: PIN cannot be empty.";
     header("Location: ../view/student.php");
     exit();
 }
 
-// 1. Find active session with this PIN
+// 2. Find active session
 $sql = "SELECT id, course_id FROM class_sessions WHERE session_pin = ? AND status = 'active' LIMIT 1";
 $stmt = mysqli_prepare($conn, $sql);
 mysqli_stmt_bind_param($stmt, "s", $pin);
@@ -28,10 +37,13 @@ if ($row = mysqli_fetch_assoc($result)) {
     $session_id = $row['id'];
     $course_id = $row['course_id'];
     
-    // 2. Check if student is enrolled in this course (Security Check)
-    $check_enroll = mysqli_query($conn, "SELECT * FROM course_requests WHERE student_id = $student_id AND course_id = $course_id AND status='approved'");
+    // --- FIX 2: Check 'enrollments' table (The correct source of truth) ---
+    $check_enroll = mysqli_prepare($conn, "SELECT id FROM enrollments WHERE student_id = ? AND course_id = ?");
+    mysqli_stmt_bind_param($check_enroll, "ii", $student_id, $course_id);
+    mysqli_stmt_execute($check_enroll);
+    $enroll_result = mysqli_stmt_get_result($check_enroll);
     
-    if (mysqli_num_rows($check_enroll) > 0) {
+    if (mysqli_num_rows($enroll_result) > 0) {
         // 3. Mark Attendance
         $insert = "INSERT INTO attendance (session_id, student_id) VALUES (?, ?)";
         $stmt_ins = mysqli_prepare($conn, $insert);
@@ -39,26 +51,31 @@ if ($row = mysqli_fetch_assoc($result)) {
         
         try {
             if (mysqli_stmt_execute($stmt_ins)) {
-                $_SESSION['msg'] = "Attendance marked successfully!";
-                $_SESSION['msg_type'] = "success";
+                $_SESSION['msg'] = "Success: Attendance marked present!";
+                $_SESSION['msg_type'] = "success"; // Green
             }
         } catch (mysqli_sql_exception $e) {
-            if ($e->getCode() == 1062) { // Duplicate entry error code
+            if ($e->getCode() == 1062) { // Duplicate entry
                 $_SESSION['msg'] = "You have already marked attendance for this session.";
-                $_SESSION['msg_type'] = "warning";
+                $_SESSION['msg_type'] = "warning"; // Orange/Yellow
             } else {
-                $_SESSION['msg'] = "Error marking attendance.";
+                $_SESSION['msg'] = "Database Error: " . $e->getMessage();
                 $_SESSION['msg_type'] = "error";
             }
         }
+        mysqli_stmt_close($stmt_ins);
     } else {
-        $_SESSION['msg'] = "You are not enrolled in this course.";
+        $_SESSION['msg'] = "Error: You are not enrolled in this course.";
         $_SESSION['msg_type'] = "error";
     }
+    mysqli_stmt_close($check_enroll);
 } else {
-    $_SESSION['msg'] = "Invalid or expired PIN.";
+    $_SESSION['msg'] = "Error: Invalid PIN or Class Session is closed.";
     $_SESSION['msg_type'] = "error";
 }
+
+mysqli_stmt_close($stmt);
+mysqli_close($conn);
 
 header("Location: ../view/student.php");
 exit();

@@ -13,6 +13,6 @@ if (isset($_GET['id'])) {
     mysqli_stmt_close($stmt);
     mysqli_close($conn);
 
-    header("Location: ../view/faculty_dashboard.php");
+    header("Location: ../view/faculty.php");
 }
 ?>

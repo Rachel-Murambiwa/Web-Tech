@@ -1,54 +1,80 @@
 body {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: Arial, sans-serif;
   background: url("../images/ashesi1.jpg") no-repeat center center/cover;
+  background-attachment: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 form {
   background: rgba(255, 255, 255, 0.95);
   padding: 30px 25px;
   border-radius: 12px;
-  box-shadow: 0px 6px 12px rgba(0,0,0,0.2);
-  width: 350px;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
   text-align: center;
 }
 
+h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: clamp(20px, 4vw, 24px);
+  color: #333;
+}
+
 input, select {
-  width: 90%;
+  width: 100%;
   padding: 12px;
-  margin: 8px auto;
+  margin: 8px 0;
   display: block;
   border-radius: 6px;
   border: 1px solid #bbb;
-  font-size: 14px;
+  font-size: clamp(14px, 2.5vw, 16px);
   outline: none;
   transition: border-color 0.3s;
+  font-family: Arial, sans-serif;
+  min-height: 44px;
 }
 
-input, select{
+input:focus, select:focus {
   border-color: #333;
+  outline: 2px solid #333;
+  outline-offset: 2px;
 }
 
 button {
-  width: 95%;
+  width: 100%;
   padding: 12px;
   margin-top: 15px;
   background-color: #333;
   color: white;
-  font-size: 16px;
+  font-size: clamp(15px, 2.5vw, 16px);
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
   display: block;
+  min-height: 44px;
+  font-weight: 600;
 }
 
 button:hover {
   background-color: #555;
+}
+
+button:active {
+  background-color: #222;
 }
 
 button a {
@@ -59,11 +85,14 @@ button a {
   height: 100%;
 }
 
-
 #registerStatus {
-  width: 95%;
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  text-align: center;
+  border-radius: 6px;
+  font-size: clamp(14px, 2.5vw, 16px);
 }
-
 
 input::placeholder {
   color: #999;
@@ -75,4 +104,116 @@ select {
 
 select:invalid {
   color: #999;
+}
+
+/* Tablet Devices */
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+    padding: 15px;
+  }
+
+  form {
+    padding: 25px 20px;
+    max-width: 450px;
+  }
+
+  input, select, button {
+    padding: 11px;
+    margin: 7px 0;
+  }
+
+  button {
+    margin-top: 12px;
+  }
+}
+
+/* Mobile Devices */
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  form {
+    padding: 20px 15px;
+    border-radius: 10px;
+  }
+
+  h2 {
+    margin-bottom: 15px;
+    font-size: 20px;
+  }
+
+  input, select, button {
+    padding: 10px;
+    margin: 6px 0;
+    font-size: 14px;
+  }
+
+  button {
+    margin-top: 10px;
+    font-size: 15px;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 360px) {
+  body {
+    padding: 8px;
+  }
+
+  form {
+    padding: 18px 12px;
+    border-radius: 8px;
+  }
+
+  h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  input, select, button {
+    padding: 9px;
+    margin: 5px 0;
+    font-size: 13px;
+  }
+}
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  body {
+    padding: 15px 20px;
+  }
+
+  form {
+    max-width: 500px;
+    padding: 20px;
+  }
+
+  h2 {
+    margin-bottom: 15px;
+  }
+
+  input, select {
+    margin: 6px 0;
+  }
+
+  button {
+    margin-top: 10px;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  input,
+  select {
+    min-height: 44px;
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  form {
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.25);
+  }
 }

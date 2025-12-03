@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_stmt_close($stmt2);
 
     mysqli_close($conn);
-    header("Location: ../view/faculty_dashboard.php");
+    header("Location: ../view/faculty.php");
     exit();
 }
 ?>

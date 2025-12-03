@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__ . '/../db/config.php';
 
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['role_id']) || $_SESSION['role_id'] != 2) {
-    header("Location: ../view/login.html");
+    header("Location: ../view/login.php");
     exit();
 }
 

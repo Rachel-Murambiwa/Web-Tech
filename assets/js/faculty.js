@@ -1,7 +1,11 @@
 function generatePin() {
+    console.log("generatePin function called!"); // First log
+    
     const courseId = document.getElementById('sessionCourseId').value;
     const display = document.getElementById('generatedPin');
 
+    console.log("Course ID selected:", courseId); // Second log
+    
     if(!courseId) {
         alert("Please select a course first.");
         return;
@@ -9,20 +13,29 @@ function generatePin() {
 
     const formData = new FormData();
     formData.append('course_id', courseId);
+    
+    console.log("About to fetch..."); // Third log
 
-    fetch('../actions/create_session.php', {
+    fetch('../actions/create_session.php', {  // Changed from ../../ to ../
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log("Response received:", response); // Fourth log
+        return response.json();
+    })
     .then(data => {
+        console.log("Data received:", data); // Fifth log
         if(data.success) {
             display.innerText = data.pin;
         } else {
             alert("Error: " + data.message);
         }
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+        console.error('Fetch Error:', error);
+        alert('Network error: ' + error.message);
+    });
 }
 
     function createCourse(event) {
