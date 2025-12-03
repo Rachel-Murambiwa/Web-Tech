@@ -5,25 +5,18 @@ require_once("../db/config.php");
 $error = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-    // Prepare statement to avoid SQL injection
     $stmt = mysqli_prepare($conn, "SELECT id, password, role_id, name FROM users WHERE email = ?");
     mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_store_result($stmt);
 
     if (mysqli_stmt_num_rows($stmt) == 1) {
-
-        // Bind the result to PHP variables
         mysqli_stmt_bind_result($stmt, $id, $passwordFromDB, $role_id, $name);
         mysqli_stmt_fetch($stmt);
-
-        // Verify the entered password against the hashed password in the DB
         if (password_verify($password, $passwordFromDB)) {
-            // Password correct → set session
             $_SESSION['user_id'] = $id;
             $_SESSION['role_id'] = $role_id;
             $_SESSION['email'] = $email;

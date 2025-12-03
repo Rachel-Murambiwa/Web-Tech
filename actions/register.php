@@ -6,7 +6,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name     = $_POST['name'];
     $email    = $_POST['email'];
     $password = $_POST['password'];
-    $role_id = 3; 
+    
+    if (isset($_POST['status'])) {
+        $selected_role = $_POST['status'];
+    } else {
+        $selected_role = 'student'; // Fallback default
+    }
+
+    // 2. Map the text selection to your Database IDs
+    switch ($selected_role) {
+        case 'admin':
+            $role_id = 1;
+            break;
+        case 'faculty':
+            $role_id = 2;
+            break;
+        case 'student':
+            $role_id = 3;
+            break;
+        default:
+            $role_id = 3; // Default to student if something goes wrong
+            break;
+    }
+    
     $check_sql = "SELECT id FROM users WHERE email = ?";
     $stmt = mysqli_prepare($conn, $check_sql);
     mysqli_stmt_bind_param($stmt, "s", $email);

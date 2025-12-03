@@ -14,19 +14,19 @@
     <input type="text" for="name" name="name" placeholder="First Name" required>
     <input type="email" name="email" placeholder="Email" required>
     <select name="status" id="registerStatus" required>
-    <option value="" disabled selected>
-        Status
-    </option>
-    <option value="student">
-        Student
-    </option>
-    <option value="faculty">
-        Faculty
-    </option>
-    <option value="admin">
-        Admin
-    </option>
-  </select>
+        <option value="" disabled selected>
+            Status
+        </option>
+        <option value="student">
+            Student
+        </option>
+        <option value="faculty">
+            Faculty
+        </option>
+        <option value="admin">
+            Admin
+        </option>
+    </select>
   <input type="password" name="password" placeholder="Password" required>
   <input type="password" name="confirm_password" placeholder="Confirm Password" required>
   <button type="submit">

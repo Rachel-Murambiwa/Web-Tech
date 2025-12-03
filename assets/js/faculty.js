@@ -1,11 +1,29 @@
 function generatePin() {
-      const pin = Math.floor(100000 + Math.random() * 900000);
-      document.getElementById('generatedPin').textContent = pin;
-      
-      setTimeout(() => {
-        alert('PIN will expire in 5 minutes');
-      }, 500);
+    const courseId = document.getElementById('sessionCourseId').value;
+    const display = document.getElementById('generatedPin');
+
+    if(!courseId) {
+        alert("Please select a course first.");
+        return;
     }
+
+    const formData = new FormData();
+    formData.append('course_id', courseId);
+
+    fetch('../actions/create_session.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            display.innerText = data.pin;
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
 
     function createCourse(event) {
       event.preventDefault();

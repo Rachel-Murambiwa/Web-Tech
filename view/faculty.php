@@ -16,7 +16,7 @@ $requests = [];
 $query = "
     SELECT c.id, c.course_code, c.course_title
     FROM courses c
-    JOIN courses_faculty cf ON c.id = cf.course_id
+    JOIN course_faculty cf ON c.id = cf.course_id
     WHERE cf.faculty_id = ?
 ";
 if ($stmt = mysqli_prepare($conn, $query)) {
@@ -38,7 +38,7 @@ $query2 = "
     FROM course_requests cr
     JOIN users u ON cr.student_id = u.id
     JOIN courses c ON cr.course_id = c.id
-    JOIN courses_faculty cf ON c.id = cf.course_id
+    JOIN course_faculty cf ON c.id = cf.course_id
     WHERE cf.faculty_id = ? AND cr.status='pending'
 ";
 if ($stmt2 = mysqli_prepare($conn, $query2)) {
@@ -74,96 +74,67 @@ if ($stmt2 = mysqli_prepare($conn, $query2)) {
     </ul>
   </nav>
 
-  <main>
-
+ <main>
+  <div class="dashboard-card">
+  <h3>Start Class Session</h3>
+  <select id="sessionCourseId" style="padding: 10px; width: 100%; margin-bottom: 10px;">
+    <option value="">-- Select Course --</option>
+    <?php foreach ($courses as $course): ?>
+      <option value="<?= $course['id'] ?>">
+        <?= htmlspecialchars($course['course_code']) ?>
+      </option>
+    <?php endforeach; ?>
+  </select>
+  
+  <button onclick="generatePin()">Generate Attendance PIN</button>
+  <div class="pin-display" id="generatedPin" style="font-size: 2em; margin-top: 10px; font-weight: bold; color: #333;">----</div>
+</div>
+    
 
     <div class="dashboard-card">
-      <h3>Generate Attendance PIN</h3>
-      <button onclick="generatePin()">Generate PIN</button>
-      <div class="pin-display" id="generatedPin">PIN will appear here</div>
+        <h3>Create New Course</h3>
+        <form action="../actions/create_courses.php" method="POST">
+            <div class="form-group">
+                <label>Course Code</label>
+                <input type="text" name="courseCode" placeholder="e.g., CS101" required>
+            </div>
+            <div class="form-group">
+                <label>Course Title</label>
+                <input type="text" name="courseTitle" placeholder="e.g., Intro to CS" required>
+            </div>
+            <button type="submit">Create Course</button>
+        </form>
 
-      <h3 style="margin-top: 30px;">Students Present Today</h3>
-      <ul class="student-list" id="studentList">
-        <li>Rachel Murambiwa</li>
-        <li>Aisha Chihuri</li>
-        <li>Tanatswa Mhiribidi</li>
-        <li>Soukuratou Zoumarou</li>
-      </ul>
+        <h4 style="margin-top: 20px;">Your Courses</h4>
+        <ul class="course-list">
+            <?php foreach ($courses as $course): ?>
+                <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
+                    <strong><?= htmlspecialchars($course['course_code']) ?></strong>
+                </li>
+            <?php endforeach; ?>
+        </ul>
     </div>
 
-
     <div class="dashboard-card">
-      <h3>Create New Course</h3>
-
-      <form action="../backend/create_course.php" method="POST">
-        <div class="form-group">
-          <label for="courseCode">Course Code *</label>
-          <input type="text" name="courseCode" placeholder="e.g., CS101" required>
-        </div>
-
-        <div class="form-group">
-          <label for="courseTitle">Course Title *</label>
-          <input type="text" name="courseTitle" placeholder="e.g., Intro to CS" required>
-        </div>
-
-        <button type="submit">Create Course</button>
-      </form>
-
-      <h3 style="margin-top: 30px;">My Courses</h3>
-      <ul class="course-list" id="courseList">
-        <?php if (empty($courses)): ?>
-          <li>No courses yet. Create one above.</li>
-        <?php else: ?>
-          <?php foreach ($courses as $course): ?>
-            <li class="course-item">
-              <h4><?= htmlspecialchars($course['course_code']) ?> - <?= htmlspecialchars($course['course_title']) ?></h4>
-
-              <p><strong>Students:</strong>
-                <?php
-                // count approved students for this course
-                $courseId = (int) $course['id'];
-                $count = 0;
-                if ($stmt3 = mysqli_prepare($conn, "SELECT COUNT(*) FROM course_requests WHERE course_id=? AND status='approved'")) {
-                    mysqli_stmt_bind_param($stmt3, "i", $courseId);
-                    mysqli_stmt_execute($stmt3);
-                    mysqli_stmt_bind_result($stmt3, $count);
-                    mysqli_stmt_fetch($stmt3);
-                    mysqli_stmt_close($stmt3);
-                }
-                echo (int)$count;
-                ?>
-              </p>
-            </li>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      </ul>
-    </div>
-
-
-    <div class="dashboard-card">
-      <h3>Student Course Requests</h3>
-      <div id="requestsList">
+        <h3>Pending Requests</h3>
         <?php if (empty($requests)): ?>
             <p>No pending requests.</p>
         <?php else: ?>
             <?php foreach ($requests as $req): ?>
-            <div class="request-item">
-              <h4><?= htmlspecialchars($req['student_name']) ?></h4>
-              <p><strong>Course:</strong> <?= htmlspecialchars($req['course_code']) ?> - <?= htmlspecialchars($req['course_title']) ?></p>
-              <p><strong>Student ID:</strong> <?= htmlspecialchars($req['student_id']) ?></p>
-              <p><strong>Email:</strong> <?= htmlspecialchars($req['email']) ?></p>
-
-              <div class="request-actions">
-                <a class="secondary" href="../actions/approve_request.php?id=<?= (int)$req['request_id'] ?>">Approve</a>
-                <a class="danger" href="../actions/reject_request.php?id=<?= (int)$req['request_id'] ?>">Reject</a>
-              </div>
+            <div class="request-item" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
+                <div>
+                    <strong><?= htmlspecialchars($req['student_name']) ?></strong><br>
+                    <small><?= htmlspecialchars($req['course_code']) ?></small>
+                </div>
+                <div>
+                    <a href="../actions/approve_request.php?id=<?= $req['request_id'] ?>" style="color: green; margin-right: 10px;">Approve</a>
+                    <a href="../actions/reject_request.php?id=<?= $req['request_id'] ?>" style="color: red;">Reject</a>
+                </div>
             </div>
             <?php endforeach; ?>
         <?php endif; ?>
-      </div>
     </div>
-
-  </main>
+</main>
 
   <script src="../assets/js/faculty.js"></script>
 
